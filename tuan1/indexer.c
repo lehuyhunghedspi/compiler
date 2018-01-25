@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
 int  isdauphancach(char c,char* dauphancach){
   int i=0;
   for(i=0;i<8;i++){
@@ -9,53 +11,70 @@ int  isdauphancach(char c,char* dauphancach){
   }
   return 0;
 }
-char * doctuvakytuketthuc(FILE *filevanban,char *dauphancach){
-  char *a=(char *)malloc(sizeof(char) * 30);
-  int i=0;
-  char c;
-  int dacochucaihoacso=0;
-  int check=0;
-  while(!feof(filevanban)){
-    
-    c=fgetc(filevanban);
-    check=isdauphancach(c,dauphancach);
-    if(check==0){
-     
-      dacochucaihoacso=1;
-      //printf("%c\n",c);
-    }
-     if(dacochucaihoacso){
-       if(feof(filevanban)){
-	 a[i]='\n';
-	 i++;
-	 break;
-       }
-       else{
-	 if(check){
-	
-	   a[i]=c;
-	   i++;
-	   break;
-	 }
-	 else{
-	   a[i]=c;
-	   i++;
-	 }
-       }
-     }
-     
-      
-     
-   
-    
-  }
-  if(dacochucaihoacso){
+typedef struct treenode{
+  struct treenode *left;
+  struct treenode *right;
+  char * key;
+  int tongsoluong;
+  int mangcacdong[100];
+  int tongsodong;
+}treenode;
 
-    
-  a[i++]='\0';
-  return a;
+void duyetcay(treenode *root){
+  if(root!=NULL)
+    {
+      duyetcay(root->left);
+      printf("%s %d ",root->key,root->tongsoluong);
+      for(int i=0;i<root->tongsodong;i++)
+	{
+	  printf("%d ", (root->mangcacdong)[i]);
+	}
+      printf("\n");
+       duyetcay(root->right);
+    }
+}
+void inserttotree(treenode **root,char *key,int donghientai){
+  if((*root)==NULL){
+    int a=0;
+     printf("null");
+    *root=(treenode *)malloc(sizeof(treenode));
+    (*root)->key=(char *)malloc(sizeof(char)*sizeof(key));
+    strcpy((*root)->key,key);
+    ((*root)->mangcacdong)[0]=donghientai;
+    (*root)->tongsodong=1;
+    (*root)->tongsoluong=1;
+    (*root)->left=NULL; 
+    (*root)->right=NULL;
+   
   }
-  else return NULL;
+  else{
+    int c=strcmp((*root)->key,key);
+    if(c==0){
+      int checktotai=0;
+      for(int i=0;i<(*root)->tongsodong;i++)
+	{
+	  if(donghientai==((*root)->mangcacdong)[i])
+	    checktotai=1;
+
+	}
+      if(checktotai==0)
+	{
+	  ((*root)->mangcacdong)[(*root)->tongsodong]=donghientai;
+	  (*root)->tongsodong++;
+
+	}
+     
+      (*root)->tongsoluong++;
+    }
+    else
+      if(c>0){
+	inserttotree(&((*root)->left),key,donghientai);
+      }
+      else{
+	inserttotree(&((*root)->right),key,donghientai);
+      }
+  
+  }
 }
 
 int main(){
@@ -63,6 +82,8 @@ int main(){
   FILE *fstopw = fopen("stopw.txt", "r");
   FILE *fvanban = fopen("testvanban.txt", "r");
   char dauphancach[8] = {' ','\n','\t','.',',',';',':',EOF};
+
+
   // xu li du lieu tho
 
   char stopw[50][30];
@@ -74,52 +95,67 @@ int main(){
    
   }
   stopwlen--;
-  /* for(int i=0;i<stopwlen;i++) */
-  /*   { */
-  /*     printf("%d %s\n",i,stopw[i] ); */
-  /*   } */
-    
-    
 
 
-  
-  //su li tu dau tien
-  
-  char * chudautien;
-  //laplaiquatrinhchohetfile
-  
-    //laplaichohetfile
-  int i=0;
-  while(!feof(fvanban)){
-      chudautien=doctuvakytuketthuc(fvanban,dauphancach);
-      if(chudautien==NULL){
-	//	printf("tra ve null\n");
-      }
-      else{
-	printf("%d %s--",i, chudautien);
 
-      }
-      	i++;
-      if(i==6) break;
-      //layra mot tu va ky tu ket thuc truoc no
+// tao hash table
 
-      // kiemtra xem tu co phai la ten rieng hay tu bi cam khong
+treenode * tree=NULL;
 
-      // format thanhchuthuong
-
-      //them tu vao danh sach hoac thay doi chi so
-
-      // sap xep neu can
-
+int i=0;
+char c;
+int ketthuccau=0;
+int donghientai=1;
+char word[50];
+char f=' ';
+char* strtemp;
+while(!feof(fvanban)){
+ketthuccau=0;
+//bo qua cac ky hieu, lưu lại xem co dau cham hay khong+
+//luu so dong hien tai+luu lai ky tu chu dau tien
+if(f=='.'||f=='!'||f=='?') ketthuccau=1;
+if(f=='\n') donghientai++;
+do{c=fgetc(fvanban);
+     
+// printf("%c ", c);
+if(c=='.'||c=='!'||c=='?')
+  ketthuccau=1;
+if(c=='\n') donghientai++;
+if(c==EOF) break;
       
-      //kiemtraketthuc
-    }
+}
+ while(isdauphancach(c,dauphancach));
 
+if(c==EOF) break;
+//doc het tu + luu ky tu phan cach dau tien lai
+//printf("%c %d %d\n",c,ketthuccau,donghientai);
+word[0]=c;
+i=0;
+do{
 
+f=fgetc(fvanban);
+if(!isdauphancach(f,dauphancach))
+  word[++i]=f;
+ else break;
+}
+ while(1);
+word[++i]='\0';
 
-  // dua ra ket qua
-  
-  //
+//kiemtra co phai ten rieng hay khong
 
+if(ketthuccau==1 || (word[0]>='a' && word[0]<='z'))
+  {// neu khong phai thi them vao cay nhi phan
+
+ for(int i=0;i<sizeof(word);i++)
+   {
+word[i]=tolower(word[i]);
+}
+ inserttotree(&tree,word,donghientai);
+printf("insert %s %d\n",word,donghientai); 
+
+}
+}
+a:;
+duyetcay(tree);
   return 0;
 }
