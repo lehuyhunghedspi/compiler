@@ -1,4 +1,2 @@
-a a   .A
-b
-b
-a
+since Git 2.0000, Git defaults to the more conservatia 'simple'
+behavior, which only pushes the current branch to the correspon remote branch that 'git pull' uses to update the current branch.
