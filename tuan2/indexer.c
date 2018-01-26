@@ -71,7 +71,7 @@ void inserttotree(treenode **root,char *key,int donghientai,int columnhientai){
 int main(){
   // dinh nghia cac input cho chuong trinh
   FILE *fstopw = fopen("stopw.txt", "r");
-  FILE *fvanban = fopen("vanban.txt", "r");
+  FILE *fvanban = fopen("testvanban.txt", "r");
   char dauphancach[] = {' ','\n','\t','.',',',';',':','\'','1','2','3','4','5','6','7','8','9','0',EOF};
 
 
@@ -89,13 +89,11 @@ int main(){
 
 
 
-// tao hash table
-
 treenode * tree=NULL;
 
 int i=0;
 char c;
-int ketthuccau=0;
+int ketthuccau=1;
 int donghientai=1;
 int columnhientai=1;
 char word[100];
@@ -107,22 +105,20 @@ char f=' ';
    //luu so dong hien tai+luu lai ky tu chu dau tien
    if(f=='.'||f=='!'||f=='?') ketthuccau=1;
    if(f=='\n') donghientai++;
-     if(feof(fvanban))
-     printf("ket thuc file lan 0\n");
+    
    do{c=fgetc(fvanban);
      if(c=='.'||c=='!'||c=='?')
        ketthuccau=1;
      if(c=='\n') {
        columnhientai=1;donghientai++;
      }
+    
       if(feof(fvanban)) break;
       
    }
    while(isdauphancach(c,dauphancach));
 
      if(feof(fvanban)) goto a;
-   if(feof(fvanban))
-     printf("ket thuc file lan 1\n");
 
  
    //doc het tu + luu ky tu phan cach dau tien lai
@@ -131,26 +127,21 @@ char f=' ';
       word[0]=c;
    i=0;
    do{
-     f=fgetc(fvanban);
-
-     if(!isdauphancach(f,dauphancach))
-       {//printf("%d\n", f);
-	 word[++i]=f;}
+       f=fgetc(fvanban);
+       if(!feof(fvanban))
+        if(!isdauphancach(f,dauphancach))
+       {
+	       word[++i]=f;}
      else break;
      if(f==EOF)
        break;
    }
    while(1);
-   if(feof(fvanban))
-     //   printf("%c\n",word[i+2]);
    word[++i]='\0';
 
-   if(feof(fvanban))
-     printf("ket thuc file lan 1\n");
-
-   if(feof(fvanban)) break;
+   
    if( ketthuccau==1||(word[0]>='a' && word[0]<='z')||(word[0]>='A' && word[0]<='Z'))
-     {// neu khong phai thi them vao cay nhi phan
+     {
 
    
        for(int i=0;i<sizeof(word);i++)
@@ -159,32 +150,21 @@ char f=' ';
 	 }
 	 
        int checkstopword=0;
-
-
-
-       
-       // printf("truoc khi insert  %s\n", word);
        
        for(int j=0;j<stopwlen;j++)
-	 {
-	   // printf("%-10s %s\n",word,stopw[j] );
-	     if(strcmp(stopw[j],word)==0 && !feof(fvanban))
+	     {
+	     if(strcmp(stopw[j],word)==0)
 	     {
 	       checkstopword=1;
-	       printf("trung stop word\n");
-	       }
+	     }
 	   
 	 
 	 }
-       //  printf(" test %s\n",word);
-
-       //printf("truoc khi insert  %s\n", word);
       
        
        if(checkstopword==0)
 	 {
 	   inserttotree(&tree,word,donghientai,columnhientai);
-	   //printf("insert %s %d %d\n",word,donghientai,columnhientai); 
 	 }
        checkstopword=0;
        
