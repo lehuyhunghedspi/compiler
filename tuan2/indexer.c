@@ -140,7 +140,7 @@ char f=' ';
    word[++i]='\0';
 
    
-   if( ketthuccau==1||(word[0]>='a' && word[0]<='z')||(word[0]>='A' && word[0]<='Z'))
+   if( (ketthuccau==1||(word[0]>='A' && word[0]<='Z'))||(word[0]>='a' && word[0]<='z'))
      {
 
    
