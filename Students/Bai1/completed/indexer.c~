@@ -1,0 +1,35 @@
+#include<stdio.h>
+int main(){
+  // dinh nghia cac input cho chuong trinh
+  FILE *stopw = fopen("stopw.txt", "r");
+  FILE *vanban = fopen("vanban.txt", "r");
+  char[] dauphancach = [' ','\n','\t','.',',',';',':'];
+  
+  //su li tu dau tien
+
+  //laplaiquatrinhchohetfile
+  {
+    //laplaichohetfile
+    while(true){
+      //layra mot tu va ky tu ket thuc truoc no
+
+      // kiemtra xem tu co phai la ten rieng hay tu bi cam khong
+
+      // format thanhchuthuong
+
+      //them tu vao danh sach hoac thay doi chi so
+
+      // sap xep neu can
+      
+
+      //
+    }
+  }
+
+
+  // dua ra ket qua
+  
+  //
+
+  return 0;
+}
