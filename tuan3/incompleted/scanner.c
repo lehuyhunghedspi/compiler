@@ -19,6 +19,9 @@ extern int currentChar;
 
 extern CharCode charCodes[];
 
+
+FILE *output;
+
 /***************************************************************/
 
 void skipBlank() {
@@ -36,6 +39,8 @@ void skipComment() {
 	
 	while(1){
 		readChar();
+		if(currentChar==-1)
+			error(ERR_ENDOFCOMMENT,lineNo,colNo);
 		if(charCodes[currentChar]==CHAR_TIMES){
 			readChar();
 			if(charCodes[currentChar]==CHAR_RPAR)
@@ -234,7 +239,7 @@ Token* getToken(void) {
    case CHAR_EXCLAIMATION:
    token = makeToken(SB_NEQ, lineNo, colNo);
     readChar(); 
-    if(charCodes[currentChar]!=SB_EQ){
+    if(charCodes[currentChar]!=CHAR_EQ){
 		error(ERR_INVALIDSYMBOL, token->lineNo, token->colNo);
     }
     return token;
@@ -305,6 +310,60 @@ void printToken(Token *token) {
   }
 }
 
+void fprintToken(Token *token) {
+
+  fprintf(output,"%d-%d:", token->lineNo, token->colNo);
+
+  switch (token->tokenType) {
+  case TK_NONE: fprintf(output,"TK_NONE\n"); break;
+  case TK_IDENT: fprintf(output,"TK_IDENT(%s)\n", token->string); break;
+  case TK_NUMBER: fprintf(output,"TK_NUMBER(%s)\n", token->string); break;
+  case TK_CHAR: fprintf(output,"TK_CHAR(\'%s\')\n", token->string); break;
+  case TK_EOF: fprintf(output,"TK_EOF\n"); break;
+
+  case KW_PROGRAM: fprintf(output,"KW_PROGRAM\n"); break;
+  case KW_CONST: fprintf(output,"KW_CONST\n"); break;
+  case KW_TYPE: fprintf(output,"KW_TYPE\n"); break;
+  case KW_VAR: fprintf(output,"KW_VAR\n"); break;
+  case KW_INTEGER: fprintf(output,"KW_INTEGER\n"); break;
+  case KW_CHAR: fprintf(output,"KW_CHAR\n"); break;
+  case KW_ARRAY: fprintf(output,"KW_ARRAY\n"); break;
+  case KW_OF: fprintf(output,"KW_OF\n"); break;
+  case KW_FUNCTION: fprintf(output,"KW_FUNCTION\n"); break;
+  case KW_PROCEDURE: fprintf(output,"KW_PROCEDURE\n"); break;
+  case KW_BEGIN: fprintf(output,"KW_BEGIN\n"); break;
+  case KW_END: fprintf(output,"KW_END\n"); break;
+  case KW_CALL: fprintf(output,"KW_CALL\n"); break;
+  case KW_IF: fprintf(output,"KW_IF\n"); break;
+  case KW_THEN: fprintf(output,"KW_THEN\n"); break;
+  case KW_ELSE: fprintf(output,"KW_ELSE\n"); break;
+  case KW_WHILE: fprintf(output,"KW_WHILE\n"); break;
+  case KW_DO: fprintf(output,"KW_DO\n"); break;
+  case KW_FOR: fprintf(output,"KW_FOR\n"); break;
+  case KW_TO: fprintf(output,"KW_TO\n"); break;
+
+  case SB_SEMICOLON: fprintf(output,"SB_SEMICOLON\n"); break;
+  case SB_COLON: fprintf(output,"SB_COLON\n"); break;
+  case SB_PERIOD: fprintf(output,"SB_PERIOD\n"); break;
+  case SB_COMMA: fprintf(output,"SB_COMMA\n"); break;
+  case SB_ASSIGN: fprintf(output,"SB_ASSIGN\n"); break;
+  case SB_EQ: fprintf(output,"SB_EQ\n"); break;
+  case SB_NEQ: fprintf(output,"SB_NEQ\n"); break;
+  case SB_LT: fprintf(output,"SB_LT\n"); break;
+  case SB_LE: fprintf(output,"SB_LE\n"); break;
+  case SB_GT: fprintf(output,"SB_GT\n"); break;
+  case SB_GE: fprintf(output,"SB_GE\n"); break;
+  case SB_PLUS: fprintf(output,"SB_PLUS\n"); break;
+  case SB_MINUS: fprintf(output,"SB_MINUS\n"); break;
+  case SB_TIMES: fprintf(output,"SB_TIMES\n"); break;
+  case SB_SLASH: fprintf(output,"SB_SLASH\n"); break;
+  case SB_LPAR: fprintf(output,"SB_LPAR\n"); break;
+  case SB_RPAR: fprintf(output,"SB_RPAR\n"); break;
+  case SB_LSEL: fprintf(output,"SB_LSEL\n"); break;
+  case SB_RSEL: fprintf(output,"SB_RSEL\n"); break;
+  }
+}
+
 int scan(char *fileName) {
   Token *token;
 
@@ -313,6 +372,7 @@ int scan(char *fileName) {
 
   token = getToken();
   while (token->tokenType != TK_EOF) {
+    //fprintToken(token);
     printToken(token);
     free(token);
     token = getToken();
@@ -326,6 +386,7 @@ int scan(char *fileName) {
 /******************************************************************/
 
 int main(int argc, char *argv[]) {
+	output=fopen(argv[2],"w");
   if (argc <= 1) {
     printf("scanner: no input file.\n");
     return -1;
