@@ -24,6 +24,7 @@ void scan(void) {
 void eat(TokenType tokenType) {
   if (lookAhead->tokenType == tokenType) {
     printToken(lookAhead);
+    fprintToken(lookAhead);
     scan();
   } else missingToken(tokenType, lookAhead->lineNo, lookAhead->colNo);
 }

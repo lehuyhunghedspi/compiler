@@ -298,3 +298,58 @@ void printToken(Token *token) {
   case SB_RSEL: printf("SB_RSEL\n"); break;
   }
 }
+
+FILE *outputfileforprint;
+void fprintToken(Token *token) {
+
+  fprintf(outputfileforprint,"%d-%d:", token->lineNo, token->colNo);
+
+  switch (token->tokenType) {
+  case TK_NONE: fprintf(outputfileforprint,"TK_NONE\n"); break;
+  case TK_IDENT: fprintf(outputfileforprint,"TK_IDENT(%s)\n", token->string); break;
+  case TK_NUMBER: fprintf(outputfileforprint,"TK_NUMBER(%s)\n", token->string); break;
+  case TK_CHAR: fprintf(outputfileforprint,"TK_CHAR(\'%s\')\n", token->string); break;
+  case TK_EOF: fprintf(outputfileforprint,"TK_EOF\n"); break;
+
+  case KW_PROGRAM: fprintf(outputfileforprint,"KW_PROGRAM\n"); break;
+  case KW_CONST: fprintf(outputfileforprint,"KW_CONST\n"); break;
+  case KW_TYPE: fprintf(outputfileforprint,"KW_TYPE\n"); break;
+  case KW_VAR: fprintf(outputfileforprint,"KW_VAR\n"); break;
+  case KW_INTEGER: fprintf(outputfileforprint,"KW_INTEGER\n"); break;
+  case KW_CHAR: fprintf(outputfileforprint,"KW_CHAR\n"); break;
+  case KW_ARRAY: fprintf(outputfileforprint,"KW_ARRAY\n"); break;
+  case KW_OF: fprintf(outputfileforprint,"KW_OF\n"); break;
+  case KW_FUNCTION: fprintf(outputfileforprint,"KW_FUNCTION\n"); break;
+  case KW_PROCEDURE: fprintf(outputfileforprint,"KW_PROCEDURE\n"); break;
+  case KW_BEGIN: fprintf(outputfileforprint,"KW_BEGIN\n"); break;
+  case KW_END: fprintf(outputfileforprint,"KW_END\n"); break;
+  case KW_CALL: fprintf(outputfileforprint,"KW_CALL\n"); break;
+  case KW_IF: fprintf(outputfileforprint,"KW_IF\n"); break;
+  case KW_THEN: fprintf(outputfileforprint,"KW_THEN\n"); break;
+  case KW_ELSE: fprintf(outputfileforprint,"KW_ELSE\n"); break;
+  case KW_WHILE: fprintf(outputfileforprint,"KW_WHILE\n"); break;
+  case KW_DO: fprintf(outputfileforprint,"KW_DO\n"); break;
+  case KW_FOR: fprintf(outputfileforprint,"KW_FOR\n"); break;
+  case KW_TO: fprintf(outputfileforprint,"KW_TO\n"); break;
+
+  case SB_SEMICOLON: fprintf(outputfileforprint,"SB_SEMICOLON\n"); break;
+  case SB_COLON: fprintf(outputfileforprint,"SB_COLON\n"); break;
+  case SB_PERIOD: fprintf(outputfileforprint,"SB_PERIOD\n"); break;
+  case SB_COMMA: fprintf(outputfileforprint,"SB_COMMA\n"); break;
+  case SB_ASSIGN: fprintf(outputfileforprint,"SB_ASSIGN\n"); break;
+  case SB_EQ: fprintf(outputfileforprint,"SB_EQ\n"); break;
+  case SB_NEQ: fprintf(outputfileforprint,"SB_NEQ\n"); break;
+  case SB_LT: fprintf(outputfileforprint,"SB_LT\n"); break;
+  case SB_LE: fprintf(outputfileforprint,"SB_LE\n"); break;
+  case SB_GT: fprintf(outputfileforprint,"SB_GT\n"); break;
+  case SB_GE: fprintf(outputfileforprint,"SB_GE\n"); break;
+  case SB_PLUS: fprintf(outputfileforprint,"SB_PLUS\n"); break;
+  case SB_MINUS: fprintf(outputfileforprint,"SB_MINUS\n"); break;
+  case SB_TIMES: fprintf(outputfileforprint,"SB_TIMES\n"); break;
+  case SB_SLASH: fprintf(outputfileforprint,"SB_SLASH\n"); break;
+  case SB_LPAR: fprintf(outputfileforprint,"SB_LPAR\n"); break;
+  case SB_RPAR: fprintf(outputfileforprint,"SB_RPAR\n"); break;
+  case SB_LSEL: fprintf(outputfileforprint,"SB_LSEL\n"); break;
+  case SB_RSEL: fprintf(outputfileforprint,"SB_RSEL\n"); break;
+  }
+}
