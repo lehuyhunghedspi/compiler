@@ -31,16 +31,21 @@ void eat(TokenType tokenType) {
 
 void compileProgram(void) {
   assert("Parsing a Program ....");
+  fassert("Parsing a Program ....");
   eat(KW_PROGRAM);
   eat(TK_IDENT);
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_PERIOD);
   assert("Program parsed!");
+  fassert("Program parsed!");
+  
+
 }
 
 void compileBlock(void) {
   assert("Parsing a Block ....");
+  fassert("Parsing a Block ....");
   if (lookAhead->tokenType == KW_CONST) {
     eat(KW_CONST);
     compileConstDecl();
@@ -49,6 +54,7 @@ void compileBlock(void) {
   } 
   else compileBlock2();
   assert("Block parsed!");
+ fassert("Block parsed!");
 }
 
 void compileBlock2(void) {
@@ -83,39 +89,39 @@ void compileBlock5(void) {
 }
 
 void compileConstDecls(void) {
-  assert("Parsing subconstants...");
+ // assert("Parsing subconstants...");
   while (lookAhead->tokenType == TK_IDENT)
       compileConstDecl();
-  assert("Subconstants parsed!");
+  //assert("Subconstants parsed!");
 }
 
 void compileConstDecl(void) {
   // TODO
-  assert("Parsing constant...");
+ // assert("Parsing constant...");
   eat(TK_IDENT);
   eat(SB_EQ);
   compileConstant();
   eat(SB_SEMICOLON);
-  assert("Constant parsed!");
+ // assert("Constant parsed!");
 }
 
 void compileTypeDecls(void) {
   // TODO
-  assert("Parsing subtypes...");
+  //assert("Parsing subtypes...");
   while (lookAhead->tokenType == TK_IDENT)
       compileTypeDecl();
-  assert("Subtypes parsed!");
+  //assert("Subtypes parsed!");
 
 }
 
 void compileTypeDecl(void) {
   // TODO
-  assert("Parsing a type...");
+//  assert("Parsing a type...");
   eat(TK_IDENT);
   eat(SB_EQ);
   compileType();
   eat(SB_SEMICOLON);
-  assert("Type parsed!");
+//  assert("Type parsed!");
 }
 
 void compileVarDecls(void) {
@@ -134,6 +140,7 @@ void compileVarDecl(void) {
 
 void compileSubDecls(void) {
   assert("Parsing subtoutines ....");
+  fassert("Parsing subtoutines ....");
   // TODO
   if (lookAhead->tokenType == KW_FUNCTION) {
       compileFuncDecl();
@@ -143,10 +150,12 @@ void compileSubDecls(void) {
       compileSubDecls();
   }
   assert("Subtoutines parsed ....");
+  fassert("Subtoutines parsed ....");
 }
 
 void compileFuncDecl(void) {
   assert("Parsing a function ....");
+  fassert("Parsing a function ....");
   // TODO
   eat(KW_FUNCTION);
   eat(TK_IDENT);
@@ -157,10 +166,12 @@ void compileFuncDecl(void) {
   compileBlock();
   eat(SB_SEMICOLON);
   assert("Function parsed ....");
+  fassert("Function parsed ....");
 }
 
 void compileProcDecl(void) {
   assert("Parsing a procedure ....");
+  fassert("Parsing a procedure ....");
   // TODO
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
@@ -169,6 +180,7 @@ void compileProcDecl(void) {
   compileBlock();
   eat(SB_SEMICOLON);
   assert("Procedure parsed ....");
+  fassert("Procedure parsed ....");
 }
 
 void compileUnsignedConstant(void) {
@@ -190,7 +202,8 @@ void compileUnsignedConstant(void) {
 }
 
 void compileConstant(void) {
-   assert("Parsing a constant...");
+   //assert("Parsing a constant...");
+   //fassert("Parsing a constant...");
   switch(lookAhead->tokenType){
     case SB_PLUS:
       eat(SB_PLUS);
@@ -210,7 +223,8 @@ void compileConstant(void) {
 
   }
   // TODO
-  assert("Constant parsed!");
+  //assert("Constant parsed!");
+  //fassert("Constant parsed!");
 }
 
 void compileConstant2(void) {
@@ -345,7 +359,8 @@ switch (lookAhead->tokenType) {
       break;
   // Error
   default:
-      error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+  missingToken(SB_SEMICOLON,lookAhead->lineNo,lookAhead->colNo);
+      //error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
       break;
   }
 }
@@ -384,6 +399,7 @@ void compileStatement(void) {
 
 void compileAssignSt(void) {
   assert("Parsing an assign statement ....");
+  fassert("Parsing an assign statement ....");
   // TODO
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LSEL) {
@@ -392,28 +408,34 @@ void compileAssignSt(void) {
   eat(SB_ASSIGN);
   compileExpression();
   assert("Assign statement parsed ....");
+  fassert("Assign statement parsed ....");
 }
 
 void compileCallSt(void) {
   assert("Parsing a call statement ....");
+  fassert("Parsing a call statement ....");
   // TODO
    eat(KW_CALL);
   eat(TK_IDENT);
   compileArguments();
   assert("Call statement parsed ....");
+  fassert("Call statement parsed ....");
 }
 
 void compileGroupSt(void) {
   assert("Parsing a group statement ....");
+  fassert("Parsing a group statement ....");
   // TODO
   eat(KW_BEGIN);
   compileStatements();
   eat(KW_END);
   assert("Group statement parsed ....");
+  fassert("Group statement parsed ....");
 }
 
 void compileIfSt(void) {
   assert("Parsing an if statement ....");
+  fassert("Parsing an if statement ....");
   eat(KW_IF);
   compileCondition();
   eat(KW_THEN);
@@ -421,6 +443,7 @@ void compileIfSt(void) {
   if (lookAhead->tokenType == KW_ELSE) 
     compileElseSt();
   assert("If statement parsed ....");
+  fassert("If statement parsed ....");
 }
 
 void compileElseSt(void) {
@@ -430,16 +453,20 @@ void compileElseSt(void) {
 
 void compileWhileSt(void) {
   assert("Parsing a while statement ....");
+  fassert("Parsing a while statement ....");
+  // TODO
   // TODO
   eat(KW_WHILE);
   compileCondition();
   eat(KW_DO);
   compileStatement();
-  assert("While statement pased ....");
+  assert("While statement parsed ....");
+  fassert("While statement parsed ....");
 }
 
 void compileForSt(void) {
   assert("Parsing a for statement ....");
+  fassert("Parsing a for statement ....");
   // TODO
   eat(KW_FOR);
   eat(TK_IDENT);
@@ -451,6 +478,7 @@ void compileForSt(void) {
   compileStatement();
 
   assert("For statement parsed ....");
+  fassert("For statement parsed ....");
 }
 
 void compileArguments(void) {
@@ -556,6 +584,7 @@ void compileCondition2(void) {
 
 void compileExpression(void) {
   assert("Parsing an expression");
+  fassert("Parsing an expression");
   // TODO 
   switch (lookAhead->tokenType) {
   case SB_PLUS:
@@ -571,6 +600,7 @@ void compileExpression(void) {
       break;
   }
   assert("Expression parsed");
+  fassert("Expression parsed");
 }
 
 void compileExpression2(void) {

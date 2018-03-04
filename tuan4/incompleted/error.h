@@ -52,5 +52,5 @@ typedef enum {
 void error(ErrorCode err, int lineNo, int colNo);
 void missingToken(TokenType tokenType, int lineNo, int colNo);
 void assert(char *msg);
-
+void fassert(char *msg);
 #endif
