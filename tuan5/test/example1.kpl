@@ -1,0 +1,7 @@
+Program Example2; (* Factorial *)
+   
+Var n : Integer;
+    k: float;
+Begin
+ n:=0.32+(3.2+n)*0.1;
+End. (* Factorial *)
