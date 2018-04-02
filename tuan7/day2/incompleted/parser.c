@@ -34,25 +34,42 @@ void eat(TokenType tokenType) {
 
 void compileProgram(void) {
   // TODO: create, enter, and exit program block
+  Object* obj;
   eat(KW_PROGRAM);
+
+  obj = createProgramObject(lookAhead->string);
+  enterBlock(obj->progAttrs->scope);
   eat(TK_IDENT);
   eat(SB_SEMICOLON);
+
+  
   compileBlock();
+
+  exitBlock();
   eat(SB_PERIOD);
 }
 
 void compileBlock(void) {
   // TODO: create and declare constant objects
+   Object* obj;
   if (lookAhead->tokenType == KW_CONST) {
     eat(KW_CONST);
 
     do {
+      obj = createConstantObject(lookAhead->string);
       eat(TK_IDENT);
       eat(SB_EQ);
-      compileConstant();
+
+        if(lookAhead->tokenType==TK_NUMBER){
+            makeIntConstant(lookAhead->value);
+        }
+        else if(lookAhead->tokenType==TK_CHAR){
+          obj->constAttrs->value = makeCharConstant(lookAhead->string[0]);
+        }
+      obj->constAttrs->value = compileConstant();
+      declareObject(obj);
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
-
     compileBlock2();
   } 
   else compileBlock2();
@@ -60,13 +77,19 @@ void compileBlock(void) {
 
 void compileBlock2(void) {
   // TODO: create and declare type objects
+  Object *obj;
   if (lookAhead->tokenType == KW_TYPE) {
     eat(KW_TYPE);
 
+ 
+
     do {
+      obj = createTypeObject(lookAhead->string);
       eat(TK_IDENT);
       eat(SB_EQ);
-      compileType();
+      obj->typeAttrs->actualType =  compileType();
+      declareObject(obj);
+     
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
@@ -77,13 +100,17 @@ void compileBlock2(void) {
 
 void compileBlock3(void) {
   // TODO: create and declare variable objects
+  Object *obj;
   if (lookAhead->tokenType == KW_VAR) {
     eat(KW_VAR);
 
     do {
+      obj = createVariableObject(lookAhead->string);
       eat(TK_IDENT);
       eat(SB_COLON);
-      compileType();
+      obj->varAttrs->type =  compileType();
+      declareObject(obj);
+     
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
@@ -114,22 +141,35 @@ void compileSubDecls(void) {
 void compileFuncDecl(void) {
   // TODO: create and declare a function object
   eat(KW_FUNCTION);
+  Object * obj; 
+  obj = createFunctionObject(lookAhead->string);
+  declareObject(obj);
+  enterBlock(obj->funcAttrs->scope);
   eat(TK_IDENT);
   compileParams();
   eat(SB_COLON);
+
+  obj->funcAttrs->returnType =compileBasicType();
+
   eat(SB_SEMICOLON);
   compileBlock();
+  exitBlock();
   eat(SB_SEMICOLON);
 }
 
 void compileProcDecl(void) {
   // TODO: create and declare a procedure object
   eat(KW_PROCEDURE);
+  Object * obj; 
+  obj = createProcedureObject(lookAhead->string);
+  declareObject(obj);
+  enterBlock(obj->procAttrs->scope);
   eat(TK_IDENT);
   compileParams();
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
+  exitBlock();
 }
 
 ConstantValue* compileUnsignedConstant(void) {
@@ -138,12 +178,17 @@ ConstantValue* compileUnsignedConstant(void) {
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
+    constValue=makeIntConstant(lookAhead->value);
+
     eat(TK_NUMBER);
+
     break;
   case TK_IDENT:
+
     eat(TK_IDENT);
     break;
   case TK_CHAR:
+    constValue=makeCharConstant(lookAhead->string[0]);
     eat(TK_CHAR);
     break;
   default:
@@ -156,21 +201,22 @@ ConstantValue* compileUnsignedConstant(void) {
 ConstantValue* compileConstant(void) {
   // TODO: create and return a constant
   ConstantValue* constValue;
-
   switch (lookAhead->tokenType) {
   case SB_PLUS:
     eat(SB_PLUS);
-    compileConstant2();
+    constValue=compileConstant2();
     break;
   case SB_MINUS:
     eat(SB_MINUS);
-    compileConstant2();
+    constValue=compileConstant2();
+    constValue->intValue*=-1;
     break;
   case TK_CHAR:
+    constValue=makeCharConstant(lookAhead->string[0]);
     eat(TK_CHAR);
     break;
   default:
-    compileConstant2();
+    constValue=compileConstant2();
     break;
   }
   return constValue;
@@ -182,9 +228,12 @@ ConstantValue* compileConstant2(void) {
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
+  constValue=makeIntConstant(lookAhead->value);
     eat(TK_NUMBER);
     break;
   case TK_IDENT:
+    constValue=lookupObject(lookAhead->string)->constAttrs->value;
+    //constValue=makeIntConstant(10);
     eat(TK_IDENT);
     break;
   default:
@@ -197,23 +246,29 @@ ConstantValue* compileConstant2(void) {
 Type* compileType(void) {
   // TODO: create and return a type
   Type* type;
-
+  int number=0;
   switch (lookAhead->tokenType) {
   case KW_INTEGER: 
+    type=makeIntType();
     eat(KW_INTEGER);
     break;
-  case KW_CHAR: 
+  case KW_CHAR:
+    type=makeCharType(); 
     eat(KW_CHAR); 
     break;
   case KW_ARRAY:
+    
     eat(KW_ARRAY);
     eat(SB_LSEL);
+    number=lookAhead->value;
+
     eat(TK_NUMBER);
     eat(SB_RSEL);
     eat(KW_OF);
-    compileType();
+    type=makeArrayType(number,compileType());
     break;
   case TK_IDENT:
+    type=duplicateType(lookupObject(lookAhead->string)->typeAttrs->actualType);
     eat(TK_IDENT);
     break;
   default:
@@ -229,9 +284,12 @@ Type* compileBasicType(void) {
 
   switch (lookAhead->tokenType) {
   case KW_INTEGER: 
+   type=makeIntType();
     eat(KW_INTEGER); 
     break;
   case KW_CHAR: 
+    type=makeCharType(); 
+
     eat(KW_CHAR); 
     break;
   default:
@@ -255,17 +313,23 @@ void compileParams(void) {
 
 void compileParam(void) {
   // TODO: create and declare a parameter
+  Object *obj;
+  
   switch (lookAhead->tokenType) {
   case TK_IDENT:
+    obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
     eat(TK_IDENT);
     eat(SB_COLON);
-    compileBasicType();
+    obj->paramAttrs->type = compileBasicType();
+    declareObject(obj);
     break;
   case KW_VAR:
     eat(KW_VAR);
+     obj = createParameterObject(lookAhead->string,PARAM_REFERENCE, symtab->currentScope->owner);
     eat(TK_IDENT);
     eat(SB_COLON);
-    compileBasicType();
+    obj->paramAttrs->type = compileBasicType();
+    declareObject(obj);
     break;
   default:
     error(ERR_INVALID_PARAMETER, lookAhead->lineNo, lookAhead->colNo);
