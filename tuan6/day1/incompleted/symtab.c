@@ -120,6 +120,7 @@ Object* createProgramObject(char *programName) {
   program->kind = OBJ_PROGRAM;
   program->progAttrs = (ProgramAttributes*) malloc(sizeof(ProgramAttributes));
   program->progAttrs->scope = createScope(program,NULL);
+  
   symtab->program = program;
 
   return program;

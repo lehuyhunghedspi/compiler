@@ -1,0 +1,4 @@
+Program Example2; (* Factorial *)
+Begin
+x:=(1+1)%2/2;
+End. (* Factorial *)

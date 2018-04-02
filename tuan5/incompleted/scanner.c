@@ -4,6 +4,9 @@
  * @version 1.0
  */
 
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,6 +18,8 @@
 
 
 extern int lineNo;
+
+
 extern int colNo;
 extern int currentChar;
 

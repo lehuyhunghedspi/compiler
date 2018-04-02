@@ -1,0 +1,30 @@
+Parsing a Program ....
+1-1:KW_PROGRAM
+1-9:TK_IDENT(Example2)
+1-17:SB_SEMICOLON
+Parsing a Block ....
+Parsing subtoutines ....
+Subtoutines parsed ....
+2-1:KW_BEGIN
+Parsing an assign statement ....
+3-1:TK_IDENT(x)
+3-2:SB_ASSIGN
+Parsing an expression
+3-4:SB_LPAR
+Parsing an expression
+3-5:TK_NUMBER(1)
+3-6:SB_PLUS
+3-7:TK_NUMBER(1)
+Expression parsed
+3-8:SB_RPAR
+3-9:SB_MOD
+3-10:TK_NUMBER(2)
+3-11:SB_SLASH
+3-12:TK_NUMBER(2)
+Expression parsed
+Assign statement parsed ....
+3-13:SB_SEMICOLON
+4-1:KW_END
+Block parsed!
+4-4:SB_PERIOD
+Program parsed!

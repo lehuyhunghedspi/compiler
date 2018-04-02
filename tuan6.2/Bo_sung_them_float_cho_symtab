@@ -1,0 +1,12 @@
+bo sung:
+TypeClass:TP_FLOAT
+ConstantValue_:floatValue
+void initSymTab(void): WRITEF,READF,makeFloatType()
+duplicate: TP_FLOAT
+printType:Float
+printConstantValue:TP_Float
++bien toan cuc: floatType
++Type* makeFloatType(void);
++ConstantValue* makeFloatConstant(char ch);
+
+
