@@ -1,0 +1,4 @@
+Program mynewprogram;
+Begin
+a:=&h;
+end.

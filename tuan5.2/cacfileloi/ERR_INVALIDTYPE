@@ -1,0 +1,5 @@
+PROGRAM  EXAMPLE4;  (* Example 4 *)
+CONST MAX = 10;
+TYPE T = ;
+BEGIN
+END.  (* Example 4 *)

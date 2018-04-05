@@ -1,0 +1,23 @@
+
+void compileDeclaration(void) {
+  // TODO
+  switch (lookAhead->tokenType) {
+  case KW_CONST:
+c		ompileConstDecls();break;
+  case KW_TYPE:
+		compileTypeDecls();break;
+  case KW_PROC:
+      compileProcDecls();
+      break;
+  case KW_FUNC:
+      compileFuncDecls();
+      break;
+  case BEGIN:
+	return;
+  default:
+      error(ERR_INVALIDFACTOR, lookAhead->lineNo, lookAhead->colNo);
+      break;
+  }
+	compileDeclaration();
+}
+

@@ -1,0 +1,4 @@
+PROGRAM  EXAMPLE4;  (* Example 4 *)
+BEGIN
+IF 123,.
+END.  (* Example 4 *)

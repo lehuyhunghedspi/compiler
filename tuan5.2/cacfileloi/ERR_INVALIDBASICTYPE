@@ -1,0 +1,8 @@
+PROGRAM  EXAMPLE4;  (* Example 4 *)
+Function F(n : Intege) : Integer;
+  Begin
+    If n = 0 Then F := 1 Else F := N * F (N - 1);
+  End;
+
+BEGIN
+END.  (* Example 4 *)

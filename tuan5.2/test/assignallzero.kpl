@@ -1,0 +1,13 @@
+program allzero;
+Var matrixa:array(5) OF array(5) of integer;
+procedure setallzero;
+begin
+for i:=0 to 4 do
+	for j:=0 to 4 do
+		matrixa(.i.)(.j.):=0;
+end;(* end of setallzero *)
+
+begin
+cakk setallzero;
+end.
+

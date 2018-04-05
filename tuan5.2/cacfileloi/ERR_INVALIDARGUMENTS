@@ -1,0 +1,4 @@
+PROGRAM  EXAMPLE4;  (* Example 4 *)
+BEGIN
+CALL a(a.);
+END.  (* Example 4 *)

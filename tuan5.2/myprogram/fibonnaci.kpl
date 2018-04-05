@@ -1,0 +1,26 @@
+program fibonnay;
+
+VAR  	lenght:integer;
+
+procedure printfibonacy(max:INTEGER);
+	VAR	i:integer;
+		j:interger;
+		temp:integer;
+   begin
+	i:=1;
+	j:=1;
+
+	while i<max do
+	begin 
+		temp:=j;
+		j:=j+i;
+		i:=temp;
+		call writeI(i);
+	end;
+   end;
+
+begin
+
+call READI(lenght);
+call printfibonacy(lenght);
+end.
