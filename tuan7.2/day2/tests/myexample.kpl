@@ -1,0 +1,7 @@
+Program Example2; (* Factorial *)
+const c = 1.2323;
+
+Var n : Integer;
+
+Begin
+End. (* Factorial *)
