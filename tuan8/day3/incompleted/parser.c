@@ -164,7 +164,7 @@ void compileFuncDecl(void) {
   eat(TK_IDENT);
   // TODO: Check if a function identifier is fresh in the block
 
-  printf("%s\n", currentToken->string);
+  // printf("%s\n", currentToken->string);
   checkFreshIdent(currentToken->string);
   // create the function object
   funcObj = createFunctionObject(currentToken->string);
@@ -212,8 +212,8 @@ void compileProcDecl(void) {
 }
 
 ConstantValue* compileUnsignedConstant(void) {
-  ConstantValue* constValue;
-  Object* obj;
+  ConstantValue* constValue=NULL;
+  Object* obj=NULL;
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
@@ -224,7 +224,7 @@ ConstantValue* compileUnsignedConstant(void) {
     eat(TK_IDENT);
     // TODO: check if the constant identifier is declared and get its value
     obj = checkDeclaredConstant(currentToken->string);
-
+    constValue=duplicateConstantValue(obj->constAttrs->value);
     break;
   case TK_CHAR:
     eat(TK_CHAR);
@@ -272,6 +272,8 @@ ConstantValue* compileConstant2(void) {
   case TK_IDENT:
     eat(TK_IDENT);
     // TODO: check if the integer constant identifier is declared and get its value
+    obj=checkDeclaredConstant(currentToken->string);
+    constValue=duplicateConstantValue(obj->constAttrs->value);
     break;
   default:
     error(ERR_INVALID_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
@@ -310,7 +312,10 @@ Type* compileType(void) {
   case TK_IDENT:
     eat(TK_IDENT);
     // TODO: check if the type idntifier is declared and get its actual type
-    break;
+    obj=checkDeclaredType(currentToken->string);
+    type=duplicateType(obj->typeAttrs->actualType);
+
+ break;
   default:
     error(ERR_INVALID_TYPE, lookAhead->lineNo, lookAhead->colNo);
     break;
@@ -369,7 +374,7 @@ void compileParam(void) {
 
   eat(TK_IDENT);
   // TODO: check if the parameter identifier is fresh in the block
-  //checkFreshIdent(currentToken->string);
+  checkFreshIdent(currentToken->string);
 
   param = createParameterObject(currentToken->string, paramKind, symtab->currentScope->owner);
   eat(SB_COLON);
@@ -423,6 +428,7 @@ void compileLValue(void) {
 
   eat(TK_IDENT);
   // check if the identifier is a function identifier, or a variable identifier, or a parameter  
+
   var = checkDeclaredLValueIdent(currentToken->string);
   if (var->kind == OBJ_VARIABLE)
     compileIndexes();
@@ -665,8 +671,9 @@ void compileFactor(void) {
   case TK_IDENT:
     eat(TK_IDENT);
     // check if the identifier is declared
+   
     obj = checkDeclaredIdent(currentToken->string);
-
+  
     switch (obj->kind) {
     case OBJ_CONSTANT:
       break;
