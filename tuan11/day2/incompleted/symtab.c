@@ -81,16 +81,15 @@ void freeType(Type* type) {
 }
 
 int sizeOfType(Type* type) {
-  // TODO
-  if(type->typeClass==TP_INT||type->typeClass==TP_CHAR)
-    return 1;
-  else if(type->typeClass==TP_ARRAY){
-    return 1*sizeOfType(type->elementType)*type->arraySize;
+  switch (type->typeClass) {
+  case TP_INT:
+    return INT_SIZE;
+  case TP_CHAR:
+    return CHAR_SIZE;
+  case TP_ARRAY:
+    return (type->arraySize * sizeOfType(type->elementType));
   }
-else {
-  printf("khong ton tai kieu nay\n" );
   return 0;
-}
 }
 
 /******************* Constant utility ******************************/
@@ -350,7 +349,6 @@ void exitBlock(void) {
 }
 
 void declareObject(Object* obj) {
-  // TODO: rewrite the function to fill all values of attributes
   Object* owner;
 
   if (symtab->currentScope == NULL)  //  globalObject
@@ -362,23 +360,22 @@ void declareObject(Object* obj) {
       obj->varAttrs->localOffset = symtab->currentScope->frameSize;
       symtab->currentScope->frameSize += sizeOfType(obj->varAttrs->type);
       break;
-      
     case OBJ_PARAMETER:
       obj->paramAttrs->scope = symtab->currentScope;
       obj->paramAttrs->localOffset = symtab->currentScope->frameSize;
       symtab->currentScope->frameSize ++;
       owner = symtab->currentScope->owner;
       switch (owner->kind) {
-            case OBJ_FUNCTION:
-              addObject(&(owner->funcAttrs->paramList), obj);
-              owner->funcAttrs->paramCount ++;
-              break;
-            case OBJ_PROCEDURE:
-              addObject(&(owner->procAttrs->paramList), obj);
-              owner->procAttrs->paramCount ++;
-              break;
-            default:
-              break;
+      case OBJ_FUNCTION:
+	addObject(&(owner->funcAttrs->paramList), obj);
+	owner->funcAttrs->paramCount ++;
+	break;
+      case OBJ_PROCEDURE:
+	addObject(&(owner->procAttrs->paramList), obj);
+	owner->procAttrs->paramCount ++;
+	break;
+      default:
+	break;
       }
       break;
     case OBJ_FUNCTION:
@@ -391,6 +388,7 @@ void declareObject(Object* obj) {
     }
     addObject(&(symtab->currentScope->objList), obj);
   }
+  
 }
 
 

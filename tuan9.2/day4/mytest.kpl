@@ -1,0 +1,9 @@
+Program Example6;
+   Const c1 = 10;
+	 c3 = 1.9;
+  	 c2 = 'a';
+VAR v1:integer;
+   f1: FLOAT;
+Begin
+f1:= 32 % 2;
+End.
