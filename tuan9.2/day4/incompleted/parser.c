@@ -13,6 +13,12 @@
 #include "error.h"
 #include "debug.h"
 
+
+
+
+
+
+
 Token *currentToken;
 Token *lookAhead;
 

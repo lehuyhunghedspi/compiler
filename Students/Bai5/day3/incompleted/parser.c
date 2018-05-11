@@ -522,9 +522,10 @@ void compileForSt(void) {
   type = compileExpression();
   checkTypeEquality(varType, type);
   genST();
+  beginLoop = getCurrentCodeAddress();
   genCV();
   genLI();
-  beginLoop = getCurrentCodeAddress();
+  
   eat(KW_TO);
 
   type = compileExpression();

@@ -14,7 +14,8 @@ scanner.o: scanner.c
 	${CC} ${CFLAGS} scanner.c
 
 parser.o: parser.c
-	gcc -c parser.c
+	${CC} ${CFLAGS} parser.c
+
 reader.o: reader.c
 	${CC} ${CFLAGS} reader.c
 

@@ -1,0 +1,19 @@
+1. tai sao caan make file
+=> make file là gì
+
+make giúp đỡ phải gõ lại các lệnh biên dịch một cách lặp đi lặp lại
+xóa đơn giản
+make file giúp tăng tốc độ biên dịch, no giúp chúng ta tự động biên dịch lại các file đã được chỉnh sửa thu được cái bản mới nhất
+.
+
+
+2. dùng makefile như thế nào => biên dịch chương trình dịch và các file c như là c advance hay c basic
+
+target : nguồn
+	các câu lệnh để từ file nguồn ta biên dịch ra file đích
+
+hiểu được cách chạy của make file
+
+
+chúng ta tự viết được file makefile như thế nào
+

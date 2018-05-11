@@ -21,10 +21,12 @@ CodeBlock* codeBlock;
 
 void genVariableAddress(Object* var) {
   // TODO
+   genLA(0,var->varAttrs->localOffset);
 }
 
 void genVariableValue(Object* var) {
   // TODO
+  genLV(0,var->varAttrs->localOffset);
 }
 
 int isPredefinedFunction(Object* func) {
@@ -76,6 +78,7 @@ void genDCT(int delta) {
 }
 
 Instruction* genJ(CodeAddress label) {
+  //printf("%d\n", );
   Instruction* inst = codeBlock->code + codeBlock->codeSize;
   emitJ(codeBlock,label);
   return inst;

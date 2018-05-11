@@ -133,5 +133,7 @@ void loadCode(CodeBlock* codeBlock, FILE* f) {
 
 
 void saveCode(CodeBlock* codeBlock, FILE* f) {
+    printCodeBlock(codeBlock);
+  
   fwrite(codeBlock->code, sizeof(Instruction), codeBlock->codeSize, f);
 }

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "error.h"
 
-#define NUM_OF_ERRORS 31
+#define NUM_OF_ERRORS 29
 
 struct ErrorMessage {
   ErrorCode errorCode;
