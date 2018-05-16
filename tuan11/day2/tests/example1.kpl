@@ -1,3 +1,7 @@
-Program Example1; 
+Program Example1;
+var n:integer;
+m:integer;
 Begin
+while n<2 do
+ n:=n+1;
 End.

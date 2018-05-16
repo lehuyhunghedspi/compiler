@@ -2,8 +2,10 @@ CFLAGS = -c -Wall
 CC = gcc
 LIBS =  -lm 
 
-kplc: main.o parser.o scanner.o reader.o charcode.o token.o error.o symtab.o semantics.o debug.o codegen.o  instructions.o
-	${CC} main.o parser.o scanner.o reader.o charcode.o token.o error.o symtab.o semantics.o debug.o codegen.o instructions.o -o kplc
+all: kplc
+
+kplc: main.o parser.o scanner.o reader.o charcode.o token.o error.o symtab.o semantics.o debug.o instructions.o codegen.o
+	${CC} main.o parser.o scanner.o reader.o charcode.o token.o error.o symtab.o semantics.o debug.o instructions.o codegen.o -o kplc
 
 main.o: main.c
 	${CC} ${CFLAGS} main.c

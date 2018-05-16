@@ -10,6 +10,7 @@
 #include "scanner.h"
 #include "parser.h"
 #include "semantics.h"
+#include "symtab.h"
 #include "error.h"
 #include "debug.h"
 #include "codegen.h"
@@ -207,6 +208,10 @@ ConstantValue* compileUnsignedConstant(void) {
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
+    constValue=makeFloatConstant(currentToken->string);
+    break;
   case TK_IDENT:
     eat(TK_IDENT);
 
@@ -258,6 +263,10 @@ ConstantValue* compileConstant2(void) {
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
+    constValue=makeFloatConstant(currentToken->string);
+  break;
   case TK_IDENT:
     eat(TK_IDENT);
     obj = checkDeclaredConstant(currentToken->string);
@@ -287,6 +296,10 @@ Type* compileType(void) {
   case KW_CHAR: 
     eat(KW_CHAR); 
     type = makeCharType();
+    break;
+   case KW_FLOAT:
+    eat(KW_FLOAT);
+    type=makeFloatType();
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
@@ -319,6 +332,10 @@ Type* compileBasicType(void) {
   case KW_INTEGER: 
     eat(KW_INTEGER); 
     type = makeIntType();
+    break;
+  case KW_FLOAT:
+    eat(KW_FLOAT);
+    type=makeFloatType();
     break;
   case KW_CHAR: 
     eat(KW_CHAR); 
@@ -512,10 +529,9 @@ void compileWhileSt(void) {
   beginWhile = getCurrentCodeAddress();
   eat(KW_WHILE);
 
-  
+  fjInstruction = genFJ(DC_VALUE);
 
   compileCondition();
-  fjInstruction = genFJ(DC_VALUE);
   eat(KW_DO);
   compileStatement();
 
@@ -669,29 +685,6 @@ void compileCondition(void) {
 
   type2 = compileExpression();
   checkTypeEquality(type1,type2);
-  
-  switch (op) {
-  case SB_EQ:
-    genEQ();
-    break;
-  case SB_NEQ:
-    genNE();
-    break;
-  case SB_LE:
-    genLE();
-    break;
-  case SB_LT:
-    genLT();
-    break;
-  case SB_GE:
-    genGE();
-    break;
-  case SB_GT:
-    genGT();
-    break;
-  default:
-    break;
-  }
 }
 
 Type* compileExpression(void) {
@@ -850,6 +843,11 @@ Type* compileFactor(void) {
     eat(TK_CHAR);
     type = charType;
     genLC(currentToken->value);
+    break;
+   case TK_FLOAT:
+    eat(TK_FLOAT);
+    type=makeFloatType();
+    genLC((int)atof(currentToken->string));
     break;
   case TK_IDENT:
     eat(TK_IDENT);

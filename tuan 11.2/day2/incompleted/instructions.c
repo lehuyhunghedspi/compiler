@@ -5,8 +5,6 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include "instructions.h"
 
 #define MAX_BLOCK 50
@@ -68,6 +66,10 @@ int emitLT(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_LT, DC_VALUE, D
 int emitGE(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_GE, DC_VALUE, DC_VALUE); }
 int emitLE(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_LE, DC_VALUE, DC_VALUE); }
 
+
+int emitRF(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_RF, DC_VALUE, DC_VALUE); }
+int emitWRF(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_WRF, DC_VALUE, DC_VALUE); }
+
 int emitBP(CodeBlock* codeBlock) { return emitCode(codeBlock, OP_BP, DC_VALUE, DC_VALUE); }
 
 
@@ -103,6 +105,9 @@ void printInstruction(Instruction* inst) {
   case OP_LT: printf("LT"); break;
   case OP_GE: printf("GE"); break;
   case OP_LE: printf("LE"); break;
+
+  case OP_WRF: printf("WRF"); break;
+  case OP_RF: printf("RF"); break;
 
   case OP_BP: printf("BP"); break;
   default: break;
