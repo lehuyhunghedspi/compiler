@@ -1,0 +1,6 @@
+Program Example1; 
+var n:integer;
+	k:float;
+Begin
+n:=n%3*4;
+End.

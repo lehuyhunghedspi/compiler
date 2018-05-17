@@ -1,0 +1,5 @@
+Program Example1; 
+var n:integer;
+Begin
+n:=2+1;
+End.
